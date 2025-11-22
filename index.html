@@ -3,954 +3,1217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foxtrot 59 Journey Archive</title>
+    <title>ATY — Archive The Years | Foxtrot 59 Journey</title>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- CSV Parser Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
     <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --navy: #0A1A2F;
+            --deep-blue: #112240;
+            --gold: #D4AF37;
+            --gold-light: #F4D06F;
+            --sand: #F4F1EB;
+            --slate: #8892b0;
+            --white: #e6f1ff;
+            --transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --navy: #0A1A2F;
-            --gold: #D4AF37;
-            --sand: #F4F1EB;
-            --ocean: #1B3B6F;
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            color: var(--navy);
-            background: var(--sand);
+            background-color: var(--navy);
+            color: var(--sand);
+            line-height: 1.6;
             overflow-x: hidden;
+            background-image: radial-gradient(var(--deep-blue) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
-        h1, h2, h3 {
+        h1, h2, h3, h4 {
             font-family: 'Playfair Display', serif;
+            color: var(--white);
         }
 
-        /* Navigation */
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- UTILITIES --- */
+        .text-gold { color: var(--gold); }
+        .font-mono { font-family: 'Space Mono', monospace; font-size: 0.85rem; }
+        .section-padding { padding: 100px 0; }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            background: transparent;
+            transition: var(--transition);
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+            color: var(--navy);
+        }
+
+        /* --- ANIMATIONS --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- NAVIGATION --- */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
+            z-index: 1000;
             background: rgba(10, 26, 47, 0.95);
             backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 1rem 5%;
-            box-shadow: 0 2px 20px rgba(212, 175, 55, 0.3);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            transition: var(--transition);
+            height: 80px;
+            display: flex;
+            align-items: center;
         }
 
         nav .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
         }
 
-        nav .logo {
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+
+        .logo h1 {
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .logo span {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            color: var(--white);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--gold);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .mobile-toggle {
+            display: none;
             color: var(--gold);
             font-size: 1.5rem;
-            font-weight: 700;
-            font-family: 'Playfair Display', serif;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            cursor: pointer;
         }
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: var(--sand);
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 400;
-        }
-
-        nav a:hover {
-            color: var(--gold);
-        }
-
-        /* Hero Section */
-        #home {
-            min-height: 100vh;
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            position: relative;
-            background: linear-gradient(135deg, var(--navy) 0%, var(--ocean) 100%);
             overflow: hidden;
         }
 
-        #home::before {
-            content: '';
+        .hero-bg {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(212, 175, 55, 0.03) 50px, rgba(212, 175, 55, 0.03) 51px),
-                repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(212, 175, 55, 0.03) 50px, rgba(212, 175, 55, 0.03) 51px);
-            opacity: 0.5;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1468581264429-2548ef9eb732?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            filter: brightness(0.4) saturate(0.8);
+            z-index: -2;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(10,26,47,0.4) 0%, rgba(10,26,47,0.9) 100%);
+            z-index: -1;
+        }
+
+        .hero-compass {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hero-compass::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            border: 1px dashed rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            animation: spin-slow 60s linear infinite;
         }
 
         .hero-content {
-            position: relative;
-            z-index: 2;
-            color: var(--sand);
-            padding: 2rem;
+            max-width: 800px;
+            padding: 0 20px;
         }
 
-        .compass-icon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 2rem;
-            animation: rotate 20s linear infinite;
+        .hero-subtitle {
+            color: var(--gold);
+            font-family: 'Space Mono', monospace;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            display: block;
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .hero-content h1 {
+        .hero h2 {
             font-size: 4rem;
-            margin-bottom: 1rem;
-            color: var(--gold);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            line-height: 1.1;
         }
 
-        .hero-content .subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--sand);
-        }
-
-        .coordinates {
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            margin-bottom: 2rem;
-            opacity: 0.8;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            border: 2px solid var(--gold);
-            background: transparent;
-            color: var(--gold);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            background: var(--gold);
-            color: var(--navy);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
-        }
-
-        /* Section Styles */
-        section {
-            padding: 100px 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 3rem;
-            color: var(--navy);
-            margin-bottom: 1rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-header h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: var(--gold);
-        }
-
-        .section-header p {
+        .hero p {
             font-size: 1.2rem;
-            color: var(--ocean);
-            font-style: italic;
-            margin-top: 1.5rem;
+            color: var(--slate);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Rope Divider */
-        .rope-divider {
-            height: 20px;
-            background: repeating-linear-gradient(
-                90deg,
-                var(--gold) 0px,
-                var(--gold) 10px,
-                transparent 10px,
-                transparent 20px
-            );
-            margin: 3rem 0;
-            opacity: 0.3;
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
         }
 
-        /* Journey Timeline */
-        #journey {
-            background: var(--navy);
-            color: var(--sand);
-            padding: 100px 5%;
-        }
-
-        #journey .section-header h2,
-        #journey .section-header p {
-            color: var(--sand);
-        }
-
-        #journey .section-header h2::after {
-            background: var(--gold);
-        }
-
-        .journey-intro {
-            background: rgba(212, 175, 55, 0.1);
-            padding: 2rem;
-            border-left: 4px solid var(--gold);
-            margin-bottom: 4rem;
-            line-height: 1.8;
-            font-size: 1.1rem;
+        /* --- JOURNEY (TIMELINE) --- */
+        .journey-header {
+            text-align: center;
+            margin-bottom: 60px;
         }
 
         .timeline {
             position: relative;
-            padding: 2rem 0;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .timeline::before {
+        /* The Line */
+        .timeline::after {
             content: '';
             position: absolute;
-            left: 50%;
+            width: 2px;
+            background: var(--gold);
             top: 0;
             bottom: 0;
-            width: 3px;
-            background: var(--gold);
+            left: 50%;
+            margin-left: -1px;
+            opacity: 0.3;
         }
 
         .timeline-item {
-            display: flex;
-            margin-bottom: 4rem;
+            padding: 10px 40px;
             position: relative;
+            background-color: inherit;
+            width: 50%;
+            margin-bottom: 40px;
         }
 
-        .timeline-item:nth-child(odd) {
-            flex-direction: row;
-        }
+        .timeline-item.left { left: 0; text-align: right; }
+        .timeline-item.right { left: 50%; text-align: left; }
 
-        .timeline-item:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        .timeline-content {
-            width: 45%;
-            background: rgba(27, 59, 111, 0.5);
-            padding: 2rem;
-            border-radius: 10px;
-            border: 2px solid var(--gold);
-            position: relative;
-        }
-
-        .timeline-icon {
+        /* The Dots */
+        .timeline-item::after {
+            content: '⚓';
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 60px;
-            background: var(--gold);
+            width: 30px;
+            height: 30px;
+            right: -17px;
+            background-color: var(--navy);
+            border: 2px solid var(--gold);
+            top: 15px;
             border-radius: 50%;
+            z-index: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: var(--navy);
-            font-weight: bold;
-            border: 4px solid var(--navy);
-        }
-
-        .timeline-content h3 {
+            font-size: 14px;
             color: var(--gold);
-            margin-bottom: 1rem;
-            font-size: 1.8rem;
         }
 
-        /* Profiles Grid */
+        .timeline-item.right::after { left: -17px; }
+
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: var(--deep-blue);
+            position: relative;
+            border-radius: 6px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .timeline-date {
+            font-family: 'Space Mono', monospace;
+            color: var(--gold);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* --- PROFILES --- */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: transparent;
+            color: var(--slate);
+            cursor: pointer;
+            border-radius: 20px;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--gold);
+            color: var(--navy);
+            border-color: var(--gold);
+        }
+
         .profiles-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 30px;
         }
 
         .profile-card {
-            background: white;
-            border: 3px solid var(--gold);
-            border-radius: 10px;
+            background-color: var(--deep-blue);
+            border-radius: 8px;
             overflow: hidden;
-            transition: all 0.3s;
+            border: 1px solid transparent;
+            transition: var(--transition);
+            cursor: pointer;
             position: relative;
-        }
-
-        .profile-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(212, 175, 55, 0.05) 10px,
-                rgba(212, 175, 55, 0.05) 20px
-            );
-            pointer-events: none;
         }
 
         .profile-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            border-color: var(--gold);
         }
 
-        .profile-image {
-            width: 100%;
+        .card-img-wrapper {
+            position: relative;
+            overflow: hidden;
             height: 280px;
-            background: linear-gradient(135deg, var(--ocean), var(--navy));
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        }
+
+        .profile-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            filter: grayscale(20%);
+        }
+
+        .profile-card:hover img {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+        }
+
+        .card-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .card-campus {
             color: var(--gold);
-            font-size: 3rem;
+            font-size: 0.8rem;
+            font-family: 'Space Mono', monospace;
         }
 
-        .profile-info {
-            padding: 1.5rem;
-        }
-
-        .profile-info h3 {
-            color: var(--navy);
-            margin-bottom: 0.5rem;
-            font-size: 1.3rem;
-        }
-
-        .profile-nickname {
-            color: var(--gold);
-            font-style: italic;
-            margin-bottom: 1rem;
-        }
-
-        .profile-details {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: var(--ocean);
-        }
-
-        .profile-details strong {
-            color: var(--navy);
-        }
-
-        /* Gallery */
+        /* --- GALLERY --- */
         .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            display: columns;
+            columns: 3 250px;
+            gap: 20px;
         }
 
         .gallery-item {
-            height: 300px;
-            background: linear-gradient(135deg, var(--ocean), var(--navy));
-            border-radius: 10px;
+            margin-bottom: 20px;
+            break-inside: avoid;
+            position: relative;
+            border-radius: 8px;
             overflow: hidden;
-            position: relative;
             cursor: pointer;
-            transition: transform 0.3s;
         }
 
-        .gallery-item:hover {
-            transform: scale(1.05);
-        }
-
-        .gallery-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(10, 26, 47, 0.9);
-            color: var(--sand);
-            padding: 1rem;
-            transform: translateY(100%);
-            transition: transform 0.3s;
-        }
-
-        .gallery-item:hover .gallery-caption {
-            transform: translateY(0);
-        }
-
-        /* Messages Section */
-        .messages-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .message-card {
-            background: white;
-            padding: 2rem;
-            border-left: 5px solid var(--gold);
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        .message-card::before {
-            content: '"';
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 4rem;
-            color: var(--gold);
-            opacity: 0.2;
-            font-family: Georgia, serif;
-        }
-
-        .message-author {
-            color: var(--gold);
-            font-weight: 600;
-            margin-top: 1rem;
-            text-align: right;
-        }
-
-        /* Upload Form */
-        .upload-form {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 3rem;
-            border-radius: 10px;
-            border: 3px solid var(--gold);
-        }
-
-        .form-group {
-            margin-bottom: 2rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--navy);
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
+        .gallery-item img {
             width: 100%;
-            padding: 1rem;
-            border: 2px solid var(--ocean);
-            border-radius: 5px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
+            display: block;
+            transition: var(--transition);
         }
 
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.8);
         }
 
-        .form-instructions {
-            background: rgba(212, 175, 55, 0.1);
-            padding: 2rem;
-            border-left: 4px solid var(--gold);
-            margin-bottom: 2rem;
+        .gallery-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 26, 47, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
         }
 
-        .form-instructions h3 {
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+        /* --- MESSAGE WALL (LOGBOOK) --- */
+        .logbook-container {
+            background: var(--sand);
             color: var(--navy);
-            margin-bottom: 1rem;
-        }
-
-        .form-instructions ul {
-            margin-left: 1.5rem;
-            line-height: 2;
-        }
-
-        /* Contact Section */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .contact-card {
-            text-align: center;
-            padding: 2rem;
-            background: white;
-            border-radius: 10px;
-            border: 2px solid var(--gold);
-        }
-
-        .contact-icon {
-            font-size: 3rem;
-            color: var(--gold);
-            margin-bottom: 1rem;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--navy);
-            color: var(--sand);
-            text-align: center;
-            padding: 3rem 5%;
+            padding: 40px;
+            border-radius: 4px;
             position: relative;
+            box-shadow: 10px 10px 0px rgba(212, 175, 55, 0.5);
         }
 
-        .footer-anchor {
-            font-size: 3rem;
+        .logbook-container::before {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 0, 0, 0.2); /* Margin line */
+        }
+
+        .logbook-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .log-entry {
+            background: #fff;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .log-header {
+            border-bottom: 1px dashed #aaa;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .log-form input, .log-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.5);
+            border: 1px solid #ccc;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* --- UPLOAD & CONTACT --- */
+        .upload-section {
+            background: var(--deep-blue);
+            border-top: 1px solid var(--gold);
+        }
+
+        .upload-card {
+            background: rgba(10, 26, 47, 0.8);
+            padding: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
             color: var(--gold);
-            margin-bottom: 1rem;
+            font-size: 0.9rem;
         }
 
-        footer p {
-            font-style: italic;
-            font-size: 1.1rem;
+        input[type="text"], input[type="email"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            background: var(--navy);
+            border: 1px solid #233554;
+            color: var(--white);
+            border-radius: 4px;
+            font-family: 'Poppins', sans-serif;
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            nav .container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1rem;
-            }
-
-            .hero-content h1 {
-                font-size: 3rem;
-            }
-
-            section {
-                padding: 80px 5%;
-            }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--gold);
         }
 
-        @media (max-width: 768px) {
-            nav {
-                padding: 1rem 3%;
-            }
-
-            nav ul {
-                font-size: 0.9rem;
-                gap: 0.8rem;
-            }
-
-            .hero-content h1 {
-                font-size: 2.2rem;
-            }
-
-            .hero-content .subtitle {
-                font-size: 1.1rem;
-            }
-
-            .compass-icon {
-                width: 80px;
-                height: 80px;
-            }
-
-            .section-header h2 {
-                font-size: 2rem;
-            }
-
-            .section-header p {
-                font-size: 1rem;
-            }
-
-            section {
-                padding: 60px 5%;
-            }
-
-            .timeline::before {
-                left: 20px;
-            }
-
-            .timeline-item {
-                flex-direction: column !important;
-                margin-bottom: 3rem;
-            }
-
-            .timeline-content {
-                width: calc(100% - 60px);
-                margin-left: 60px;
-                padding: 1.5rem;
-            }
-
-            .timeline-content h3 {
-                font-size: 1.4rem;
-            }
-
-            .timeline-icon {
-                left: 20px;
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
-            }
-
-            .profiles-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .messages-container {
-                grid-template-columns: 1fr;
-            }
-
-            .upload-form {
-                padding: 2rem 1.5rem;
-            }
-
-            .contact-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .btn {
-                width: 100%;
-                text-align: center;
-            }
-
-            .journey-intro {
-                padding: 1.5rem;
-                font-size: 1rem;
-            }
+        .file-drop {
+            border: 2px dashed var(--gold);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            background: rgba(212, 175, 55, 0.05);
+            transition: var(--transition);
         }
 
-        @media (max-width: 480px) {
-            .hero-content h1 {
-                font-size: 1.8rem;
-            }
+        .file-drop:hover { background: rgba(212, 175, 55, 0.1); }
 
-            .hero-content .subtitle {
-                font-size: 1rem;
-            }
-
-            .compass-icon {
-                width: 60px;
-                height: 60px;
-            }
-
-            .section-header h2 {
-                font-size: 1.6rem;
-            }
-
-            .timeline-content {
-                width: calc(100% - 50px);
-                margin-left: 50px;
-                padding: 1rem;
-            }
-
-            .timeline-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
-
-            .profile-image {
-                height: 200px;
-            }
-
-            .upload-form {
-                padding: 1.5rem 1rem;
-            }
-
-            nav .logo {
-                font-size: 1.2rem;
-            }
-
-            nav ul {
-                font-size: 0.85rem;
-            }
+        /* --- FOOTER --- */
+        footer {
+            background: #020c1b;
+            padding: 50px 0;
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
         }
 
-        /* Smooth Scroll */
-        html {
-            scroll-behavior: smooth;
+        .footer-logo {
+            font-family: 'Playfair Display';
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            display: inline-block;
         }
 
-        /* Anchor Icon SVG */
-        .anchor-svg {
-            width: 40px;
-            height: 40px;
-            fill: var(--gold);
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
-        /* Compass SVG */
-        .compass-svg {
+        .social-links a {
+            color: var(--slate);
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover { color: var(--gold); transform: translateY(-3px); }
+
+        /* --- MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(10, 26, 47, 0.95);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: var(--deep-blue);
+            margin: 5% auto;
+            padding: 0;
+            border: 1px solid var(--gold);
+            width: 90%;
+            max-width: 800px;
+            border-radius: 8px;
+            position: relative;
+            animation: fade-up 0.4s ease-out forwards;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.1);
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: var(--gold);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .profile-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+        }
+
+        .profile-detail-img {
+            height: 100%;
+            min-height: 400px;
+        }
+        .profile-detail-img img {
             width: 100%;
             height: 100%;
-            fill: var(--gold);
+            object-fit: cover;
+        }
+
+        .profile-detail-info {
+            padding: 40px;
+        }
+
+        .detail-header h2 { color: var(--white); font-size: 2rem; }
+        .detail-header .nickname { color: var(--gold); font-family: 'Playfair Display'; font-style: italic; font-size: 1.2rem; margin-bottom: 20px; display: block;}
+        
+        .detail-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+        }
+
+        .meta-item span { display: block; font-size: 0.8rem; color: var(--slate); }
+        .meta-item strong { color: var(--white); font-weight: 500; }
+
+        .detail-bio h4 { color: var(--gold); margin-bottom: 10px; font-size: 1rem; font-family: 'Space Mono'; }
+        .detail-bio p { color: var(--slate); margin-bottom: 20px; font-size: 0.95rem; }
+        
+        .quote-box {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 15px;
+            border-left: 3px solid var(--gold);
+            font-style: italic;
+            color: var(--white);
+            margin-top: 20px;
+        }
+
+        /* --- MEDIA QUERIES --- */
+        @media screen and (max-width: 768px) {
+            .hero h2 { font-size: 2.5rem; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 80px; left: 0; width: 100%; background: var(--navy); padding: 20px; text-align: center; }
+            .nav-links.active { display: flex; }
+            .mobile-toggle { display: block; }
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item::after { left: 15px; }
+            .timeline-item.left, .timeline-item.right { left: 0; text-align: left; }
+            .profile-detail-grid { grid-template-columns: 1fr; }
+            .profile-detail-img { height: 300px; }
         }
     </style>
 </head>
 <body>
+
     <!-- Navigation -->
     <nav>
         <div class="container">
             <div class="logo">
-                <svg class="anchor-svg" viewBox="0 0 24 24">
-                    <path d="M12,2A1,1 0 0,1 13,3A1,1 0 0,1 12,4A1,1 0 0,1 11,3A1,1 0 0,1 12,2M12,6A3,3 0 0,1 15,9C15,10.5 14.2,11.77 13,12.46V14.24L17.76,19L16.76,20L12,15.24L7.24,20L6.24,19L11,14.24V12.46C9.8,11.77 9,10.5 9,9A3,3 0 0,1 12,6M12,7A2,2 0 0,0 10,9A2,2 0 0,0 12,11A2,2 0 0,0 14,9A2,2 0 0,0 12,7M3,12L5,14V22H7V19H8V22H10V14L12,12L14,14V22H16V19H17V22H19V14L21,12L19,10V12L17,14V10.5L15,9L13,10.5V14L12,13L11,14V10.5L9,9L7,10.5V14L5,12V10L3,12Z"/>
-                </svg>
-                Foxtrot 59
+                <h1>ATY Foxtrot 59</h1>
+                <span>ARCHIVE THE YEARS</span>
             </div>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#journey">Our Journey</a></li>
-                <li><a href="#profiles">Class Profiles</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#messages">Messages</a></li>
-                <li><a href="#upload">Upload</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+            <div class="mobile-toggle">
+                <i data-lucide="menu"></i>
+            </div>
+            <div class="nav-links">
+                <a href="#hero">Home</a>
+                <a href="#journey">Journey</a>
+                <a href="#profiles">Profiles</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#messages">Messages</a>
+                <a href="#upload" class="text-gold">Upload Data</a>
+            </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home">
-        <div class="hero-content">
-            <div class="compass-icon">
-                <svg class="compass-svg" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
-                    <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="1"/>
-                    <polygon points="50,15 55,45 50,50 45,45" fill="currentColor"/>
-                    <polygon points="50,85 45,55 50,50 55,55" fill="rgba(255,255,255,0.5)"/>
-                    <text x="50" y="12" text-anchor="middle" font-size="10" fill="currentColor">N</text>
-                    <text x="50" y="93" text-anchor="middle" font-size="8" fill="currentColor">S</text>
-                    <text x="92" y="54" text-anchor="middle" font-size="8" fill="currentColor">E</text>
-                    <text x="8" y="54" text-anchor="middle" font-size="8" fill="currentColor">W</text>
-                </svg>
+    <section id="hero" class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-compass"></div>
+        
+        <div class="hero-content fade-up">
+            <span class="hero-subtitle">POLITEKNIK AUP - TEKNOLOGI PENANGKAPAN IKAN ANGKATAN 59</span>
+            <h2>Foxtrot 59 Journey</h2>
+            <p>Perjalanan yang menyatukan kami dari berbagai laut menuju satu tujuan. Ini adalah arsip kenangan 40 navigator.</p>
+            <div class="hero-btns">
+                <a href="#profiles" class="btn btn-primary">Explore Profiles</a>
+                <a href="#gallery" class="btn">Open Gallery</a>
             </div>
-            <h1>Foxtrot 59 Journey Archive</h1>
-            <p class="subtitle">Satu Kelas • Satu Cerita • Satu Perjalanan</p>
-            <p class="coordinates">6°10'S • 106°48'E</p>
-            <p style="max-width: 800px; margin: 0 auto 2rem; line-height: 1.8;">
-                A journey that brought us from different seas into one destination: Foxtrot 59.
+        </div>
+    </section>
+
+    <!-- Journey Section -->
+    <section id="journey" class="section-padding">
+        <div class="container">
+            <div class="journey-header fade-up">
+                <i data-lucide="anchor" style="color: var(--gold); width: 40px; height: 40px; margin-bottom: 10px;"></i>
+                <h2>Our Journey</h2>
+                <p style="color: var(--slate); margin-top: 10px;">Ini bukan sekadar timeline. Ini peta perjalanan kami.</p>
+            </div>
+
+            <div class="timeline">
+                <!-- Origin -->
+                <div class="timeline-item left fade-up">
+                    <div class="timeline-content">
+                        <span class="timeline-date">TITIK MULA - BERBAGAI WAKTU</span>
+                        <h3>Regional Origins</h3>
+                        <p>Enam pelabuhan asal: Aceh, Pariaman, Lampung, Tegal, Maluku, dan Jakarta. Kami bergerak sendiri-sendiri sebelum takdir mempertemukan.</p>
+                    </div>
+                </div>
+
+                <!-- Semester 4 -->
+                <div class="timeline-item right fade-up">
+                    <div class="timeline-content">
+                        <span class="timeline-date">SEMESTER 4 - AWAL PERTEMUAN DAN ADAPTASI</span>
+                        <h3>The Convergence</h3>
+                        <p>Formasi kelas Foxtrot terbentuk. 40 orang asing dalam satu ruangan. Adaptasi budaya, logat, dan kebiasaan dimulai.</p>
+                    </div>
+                </div>
+
+                <!-- Semester 5 -->
+                <div class="timeline-item left fade-up">
+                    <div class="timeline-content">
+                        <span class="timeline-date">SEMESTER 5 - SAAT INI</span>
+                        <h3>Mid-Ocean Voyage</h3>
+                        <p>Masa di mana ikatan semakin kuat. Praktikum, tugas lapangan, dan kebersamaan membentuk solidaritas "Korsa".</p>
+                    </div>
+                </div>
+
+                <!-- Future -->
+                <div class="timeline-item right fade-up">
+                    <div class="timeline-content" style="border-style: dashed;">
+                        <span class="timeline-date">SEMESTER 8 - 2027</span>
+                        <h3>Port of Destination</h3>
+                        <p>Wisuda. Titik di mana kami akan kembali menyebar ke seluruh penjuru nusantara, membawa nama Foxtrot 59.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profiles Section -->
+    <section id="profiles" class="section-padding" style="background-color: var(--deep-blue);">
+        <div class="container">
+            <div class="journey-header fade-up">
+                <h2>Class Profiles</h2>
+                <p style="color: var(--slate); margin-top: 10px;">Empat puluh navigator kehidupan yang membentuk Foxtrot 59.</p>
+            </div>
+
+            <div class="filter-bar fade-up">
+                <button class="filter-btn active" onclick="filterProfiles('all')">Semua</button>
+                <button class="filter-btn" onclick="filterProfiles('Jakarta')">Jakarta</button>
+                <button class="filter-btn" onclick="filterProfiles('Aceh')">Aceh</button>
+                <button class="filter-btn" onclick="filterProfiles('Lampung')">Lampung</button>
+                <button class="filter-btn" onclick="filterProfiles('Tegal')">Tegal</button>
+                <button class="filter-btn" onclick="filterProfiles('Pariaman')">Pariaman</button>
+                <button class="filter-btn" onclick="filterProfiles('Maluku')">Maluku</button>
+            </div>
+
+            <div class="profiles-grid" id="profilesGrid">
+                <!-- Grid items will be injected via JS -->
+                <div style="color:white; text-align:center; grid-column: 1/-1;">
+                    <i data-lucide="loader" class="animate-spin"></i> Memuat data pelaut dari arsip...
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section-padding">
+        <div class="container">
+            <div class="journey-header fade-up">
+                <h2>The Archive Gallery</h2>
+                <p style="color: var(--slate);">Momen yang tidak pernah kembali, tapi selamanya tinggal.</p>
+            </div>
+
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Images injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Message Wall (Using data from Sheets) -->
+    <section id="messages" class="section-padding" style="background-color: #F4F1EB;">
+        <div class="container">
+            <div class="journey-header fade-up">
+                <h2 style="color: var(--navy);">Captain's Logbook</h2>
+                <p style="color: #666; margin-top: 10px;">Pesan untuk kelas dari para awak.</p>
+            </div>
+
+            <div class="logbook-container fade-up">
+                <!-- Form Link -->
+                <div class="log-entry" style="background: #fff; margin-bottom: 30px; border-left: 5px solid var(--navy);">
+                    <h3 style="color: var(--navy); font-family: 'Space Mono'; font-size: 1.2rem; margin-bottom: 15px;">TULIS PESAN DI LOGBOOK</h3>
+                    <p style="margin-bottom:15px; color:#666; font-size:0.9rem;">Pesan yang Anda tulis di formulir pendaftaran akan otomatis muncul di sini setelah disetujui.</p>
+                    <a href="#upload" class="btn btn-primary" style="width: 100%; text-align:center; text-decoration:none;">Isi Formulir</a>
+                </div>
+
+                <!-- Messages Grid -->
+                <div class="logbook-grid" id="messagesGrid">
+                    <!-- Messages injected via JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Page -->
+    <section id="upload" class="section-padding upload-section">
+        <div class="container">
+            <div class="journey-header fade-up">
+                <h2>Upload Data</h2>
+                <p style="color: var(--slate);">Setiap kenangan yang kamu bagikan melengkapi arsip perjalanan ini.</p>
+            </div>
+
+            <div class="upload-card fade-up">
+                <div style="text-align:center; padding: 20px;">
+                    <i data-lucide="file-text" style="width: 60px; height: 60px; color: var(--gold); margin-bottom:20px;"></i>
+                    <h3 style="color:white; margin-bottom:10px;">Formulir Data Foxtrot 59</h3>
+                    <p style="color: var(--slate); margin-bottom:30px;">
+                        Silakan isi biodata lengkap dan upload foto Anda melalui Google Form resmi kelas. 
+                        Data Anda akan ditinjau admin sebelum ditampilkan di website.
+                    </p>
+                    
+                    <!-- PLACEHOLDER LINK FORM -->
+                    <!-- User Instruction: Ganti href dibawah ini dengan Link Google Form Anda -->
+                    <a href="https://forms.google.com" target="_blank" class="btn btn-primary" style="font-size:1.1rem; padding:15px 40px; display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+                        <i data-lucide="external-link" width="18"></i> BUKA GOOGLE FORM
+                    </a>
+                    
+                    <p style="margin-top:20px; font-size:0.8rem; color: var(--slate); opacity:0.7;">
+                        Pastikan Anda login akun Google untuk mengupload foto.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">ATY Foxtrot 59</div>
+            
+            <div class="social-links">
+                <a href="#"><i data-lucide="instagram"></i></a>
+                <a href="#"><i data-lucide="message-circle"></i></a> <!-- WhatsApp placeholder -->
+                <a href="#"><i data-lucide="mail"></i></a>
+            </div>
+
+            <p style="font-family: 'Space Mono'; font-size: 0.8rem; color: var(--slate);">
+                &copy; 2025 Archive The Years Project.<br>Teknologi Penangkapan Ikan Angkatan 59.
             </p>
-            <div class="cta-buttons">
-                <a href="#journey" class="btn">Explore Archive</a>
-                <a href="#profiles" class="btn">Class Profiles</a>
+            
+            <div style="margin-top: 20px; display: inline-flex; align-items: center; gap: 10px; color: var(--gold); font-size: 0.8rem;">
+                <i data-lucide="map-pin" width="14"></i> 6°10'S • 106°48'E (Coordinates)
             </div>
         </div>
-    </section>
+    </footer>
 
-    <!-- Journey Timeline -->
-    <section id="journey">
-        <div class="section-header">
-            <h2>Our Journey</h2>
-            <p>Dari kampus yang berbeda, angin membawa kami bertemu di titik yang sama. Inilah peta perjalanan kami.</p>
-        </div>
-
-        <div class="journey-intro">
-            Sejak memasuki semester 4, mahasiswa dari enam kampus regional—Aceh, Pariaman, Lampung, Tegal, Maluku, dan kampus utama Jakarta—dipersatukan dalam satu kelas bernama 'Teknologi Penangkapan Ikan Foxtrot'. Berangkat dari latar yang berbeda, kami kini menjalani perjalanan bersama hingga semester 5 per November 2025. Semoga tetap utuh hingga semester 8 dan menuju wisuda sekitar tahun 2027.
-        </div>
-
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <h3>🏠 Asal Kampus Regional</h3>
-                    <p>Enam pelabuhan berbeda menjadi titik keberangkatan kami: Aceh, Pariaman, Lampung, Tegal, Maluku, dan Jakarta. Setiap kampus membawa warna dan karakter unik yang nantinya menyatu dalam satu perjalanan besar.</p>
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="profile-detail-grid">
+                <div class="profile-detail-img">
+                    <img id="modalImg" src="" alt="Profile">
                 </div>
-                <div class="timeline-icon">⚓</div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <h3>🎓 Semester 4: Awal Penyatuan</h3>
-                    <p>Kapal-kapal kecil mulai berlabuh di satu pelabuhan besar. Kelas Teknologi Penangkapan Ikan Foxtrot terbentuk. Proses adaptasi dimulai, dari beragam dialek hingga gaya belajar yang berbeda. Inilah momen pertama kami mengenal satu sama lain.</p>
-                </div>
-                <div class="timeline-icon">🧭</div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <h3>📚 Semester 4 Lanjutan: Pelayaran Bersama</h3>
-                    <p>Kelas Teknologi Penangkapan Ikan Foxtrot mulai menemukan ritme. Tugas kelompok, diskusi panel, hingga proyek bersama menjadi lem yang mengikat 40 navigator ini. Perbedaan mulai menjadi kekuatan.</p>
-                </div>
-                <div class="timeline-icon">⛵</div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <h3>🌊 Semester 5: Perjalanan Sekarang</h3>
-                    <p>November 2025, kami masih berlayar bersama. Tantangan semakin besar, gelombang semakin tinggi, tapi kapal kami tetap kokoh. Setiap anggota kini punya peran dan cerita yang terus berkembang.</p>
-                </div>
-                <div class="timeline-icon">🚢</div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <h3>🎯 Semester 8 & Wisuda 2027</h3>
-                    <p>Tujuan akhir perjalanan akademik ini: wisuda sekitar tahun 2027. Dengan harapan semua 40 navigator sampai di pelabuhan tujuan dengan selamat, membawa ijazah dan kenangan yang tak ternilai.</p>
-                </div>
-                <div class="timeline-icon">🏆</div>
-            </div>
-        </div>
-    </section>
-
-    <div class="rope-divider"></div>
-
-    <!-- Class Profiles -->
-    <section id="profiles">
-        <div class="section-header">
-            <h2>Class Profiles</h2>
-            <p>40 navigator kehidupan yang membentuk identitas Foxtrot.</p>
-        </div>
-
-        <div class="profiles-grid">
-            <!-- Profile Card Template (Repeat 40x with actual data) -->
-            <div class="profile-card">
-                <div class="profile-image">👤</div>
-                <div class="profile-info">
-                    <h3>Nama Lengkap Mahasiswa</h3>
-                    <p class="profile-nickname">"Nama Panggilan"</p>
-                    <div class="profile-details">
-                        <p><strong>Kampus:</strong> Jakarta / Aceh / Pariaman / dll</p>
-                        <p><strong>Asal:</strong> Kota, Provinsi</p>
-                        <p><strong>Hobi:</strong> Placeholder hobi</p>
-                        <p><strong>Keahlian:</strong> Placeholder keahlian</p>
-                        <p style="margin-top: 1rem; font-style: italic;">"Pesan dan kesan placeholder untuk perjalanan Foxtrot 59"</p>
+                <div class="profile-detail-info">
+                    <div class="detail-header">
+                        <h2 id="modalName">Nama Lengkap</h2>
+                        <span class="nickname" id="modalNick">"Nickname"</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- Repeat for all 40 members -->
-            <div class="profile-card">
-                <div class="profile-image">👤</div>
-                <div class="profile-info">
-                    <h3>Anggota Kelas 2</h3>
-                    <p class="profile-nickname">"Panggilan"</p>
-                    <div class="profile-details">
-                        <p><strong>Kampus:</strong> Lampung</p>
-                        <p><strong>Asal:</strong> Bandar Lampung</p>
-                        <p><strong>Hobi:</strong> Fotografi, Traveling</p>
-                        <p><strong>Keahlian:</strong> Design Grafis</p>
-                        <p style="margin-top: 1rem; font-style: italic;">"Foxtrot mengajarkan saya arti kebersamaan yang sesungguhnya"</p>
+                    
+                    <div class="detail-meta">
+                        <div class="meta-item">
+                            <span>ASAL KAMPUS</span>
+                            <strong id="modalCampus">Jakarta</strong>
+                        </div>
+                        <div class="meta-item">
+                            <span>ASAL DAERAH</span>
+                            <strong id="modalOrigin">Kota, Prov</strong>
+                        </div>
+                        <div class="meta-item">
+                            <span>KEAHLIAN</span>
+                            <strong id="modalSkill">Navigation</strong>
+                        </div>
+                        <div class="meta-item">
+                            <span>HOBBY</span>
+                            <strong id="modalHobby">Fishing</strong>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="profile-card">
-                <div class="profile-image">👤</div>
-                <div class="profile-info">
-                    <h3>Anggota Kelas 3</h3>
-                    <p class="profile-nickname">"Panggilan"</p>
-                    <div class="profile-details">
-                        <p><strong>Kampus:</strong> Tegal</p>
-                        <p><strong>Asal:</strong> Tegal, Jawa Tengah</p>
-                        <p><strong>Hobi:</strong> Membaca, Menulis</p>
-                        <p><strong>Keahlian:</strong> Public Speaking</p>
-                        <p style="margin-top: 1rem; font-style: italic;">"Perjalanan ini mengubah perspektif saya tentang kolaborasi"</p>
+                    <div class="detail-bio">
+                        <h4>MOTTO HIDUP</h4>
+                        <p id="modalMotto" style="font-style: italic; color: var(--white);">"Vivere militare est."</p>
+                        
+                        <h4>PESAN UNTUK KELAS</h4>
+                        <div class="quote-box">
+                            <p id="modalMessage">Foxtrot 59 adalah rumah kedua bagi saya.</p>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Add 37 more cards with similar structure -->
-            <div class="profile-card">
-                <div class="profile-image">👤</div>
-                <div class="profile-info">
-                    <h3>[Data akan diisi via upload form]</h3>
-                    <p class="profile-nickname">"..."</p>
-                    <div class="profile-details">
-                        <p><strong>Kampus:</strong> [Placeholder]</p>
-                        <p><strong>Asal:</strong> [Placeholder]</p>
-                        <p><strong>Hobi:</strong> [Placeholder]</p>
-                        <p><strong>Keahlian:</strong> [Placeholder]</p>
+                    
+                    <div style="margin-top: 30px;">
+                        <a id="modalIg" href="#" target="_blank" class="btn"><i data-lucide="instagram" style="width: 16px; vertical-align: middle; margin-right: 5px;"></i> Follow Instagram</a>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <div class="rope-divider"></div>
+    <!-- JAVASCRIPT -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
 
-    <!-- Gallery -->
-    <section id="gallery">
-        <div class="section-header">
-            <h2>Gallery</h2>
-            <p>Momen yang tak bisa kembali, tapi selalu bisa dikenang.</p>
-        </div>
+        // --- CONFIGURATION ---
+        // Link CSV Google Sheets yang Anda berikan
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSUFeP2e54_CWmXMU06wrfSzUy93ZGMybdGfZsGAUwgD8tEdC1Io6UvkaczNKuUuftkuzN_VMNYKq2O/pub?gid=500349042&single=true&output=csv';
 
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <div class="gallery-caption">
-                    <h4>Foto Bersama Semester 3</h4>
-                    <p>Pertemuan pertama yang bersejarah</p>
+        let allProfiles = [];
+
+        // --- FETCH DATA FROM GOOGLE SHEETS ---
+        function fetchSheetData() {
+            Papa.parse(SHEET_CSV_URL, {
+                download: true,
+                header: true, // Assumes first row is header
+                complete: function(results) {
+                    processSheetData(results.data);
+                },
+                error: function(err) {
+                    console.error("Error fetching Sheet:", err);
+                    document.getElementById('profilesGrid').innerHTML = '<p style="color:white;">Gagal memuat data. Coba refresh halaman.</p>';
+                }
+            });
+        }
+
+        function processSheetData(data) {
+            // Mapping data dari CSV ke format object aplikasi
+            // Kita mencari kolom yang sesuai dengan nama di Google Form
+            // Jika nama kolom di form berbeda, sesuaikan 'key' di sini.
+            
+            allProfiles = data.filter(row => {
+                // FILTER: Hanya ambil yang statusnya "Approved" (Case insensitive)
+                return row['Status'] && row['Status'].trim().toLowerCase() === 'approved';
+            }).map((row, index) => {
+                
+                // Helper to fix Google Drive Image Links
+                let imgUrl = row['Upload Foto Profil'] || '';
+                if (imgUrl.includes('drive.google.com')) {
+                    // Convert 'open?id=' or 'file/d/' to direct link 'uc?export=view&id='
+                    // Better yet: lh3.googleusercontent.com for speed if possible, but uc export is standard fallback
+                    const idMatch = imgUrl.match(/id=([a-zA-Z0-9_-]+)/) || imgUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                    if (idMatch) {
+                        imgUrl = `https://lh3.googleusercontent.com/d/${idMatch[1]}`; 
+                    }
+                }
+                // Fallback placeholder
+                if (!imgUrl) imgUrl = `https://i.pravatar.cc/400?img=${index + 1}`;
+
+                return {
+                    id: index,
+                    name: row['Nama Lengkap'] || 'Tanpa Nama',
+                    nickname: row['Nama Panggilan'] || '-',
+                    campus: row['Asal Kampus'] || 'Jakarta',
+                    origin: row['Asal Daerah'] || '-',
+                    skill: row['Keahlian/Skill'] || '-',
+                    hobby: row['Hobby'] || '-',
+                    motto: row['Motto Hidup'] || '-',
+                    message: row['Pesan untuk Kelas'] || '',
+                    instagram: row['Instagram'] || '#',
+                    img: imgUrl,
+                    timestamp: row['Timestamp'] // Google form usually adds this
+                };
+            });
+
+            renderProfiles('all');
+            renderMessages();
+        }
+
+        // --- RENDER PROFILES ---
+        const profilesGrid = document.getElementById('profilesGrid');
+
+        function renderProfiles(filter = 'all') {
+            profilesGrid.innerHTML = '';
+            const filtered = filter === 'all' ? allProfiles : allProfiles.filter(p => p.campus === filter);
+
+            if (filtered.length === 0) {
+                profilesGrid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--slate);">Belum ada data untuk kategori ini.</div>';
+                return;
+            }
+
+            filtered.forEach(profile => {
+                const card = document.createElement('div');
+                card.className = 'profile-card fade-up';
+                card.onclick = () => openModal(profile);
+                card.innerHTML = `
+                    <div class="card-img-wrapper">
+                        <img src="${profile.img}" alt="${profile.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x400?text=No+Image'">
+                    </div>
+                    <div class="card-content">
+                        <h3>${profile.name}</h3>
+                        <div class="card-campus"><i data-lucide="anchor" style="width:12px;"></i> ${profile.campus}</div>
+                    </div>
+                `;
+                profilesGrid.appendChild(card);
+            });
+            lucide.createIcons();
+            observeElements();
+        }
+
+        // Filter Logic
+        function filterProfiles(campus) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderProfiles(campus);
+        }
+
+        // --- RENDER MESSAGES ---
+        const messagesGrid = document.getElementById('messagesGrid');
+
+        function renderMessages() {
+            messagesGrid.innerHTML = '';
+            // Ambil 6 pesan terbaru
+            const recentMessages = allProfiles
+                .filter(p => p.message && p.message.trim().length > 0)
+                .slice(-6)
+                .reverse();
+
+            recentMessages.forEach(profile => {
+                const msgCard = document.createElement('div');
+                msgCard.className = 'log-entry fade-up';
+                
+                // Format date simplistic
+                let dateStr = "Unknown Date";
+                if(profile.timestamp) {
+                    const d = new Date(profile.timestamp);
+                    if(!isNaN(d)) dateStr = d.toLocaleDateString('id-ID');
+                    else dateStr = profile.timestamp.split(' ')[0]; // Fallback simple split
+                }
+
+                msgCard.innerHTML = `
+                    <div class="log-header">
+                        <span>DARI: ${profile.nickname.toUpperCase()} (${profile.campus.toUpperCase()})</span>
+                        <span>${dateStr}</span>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--navy);">"${profile.message}"</p>
+                `;
+                messagesGrid.appendChild(msgCard);
+            });
+        }
+
+        // --- MODAL LOGIC ---
+        const modal = document.getElementById("profileModal");
+        const closeBtn = document.getElementsByClassName("close-modal")[0];
+
+        function openModal(profile) {
+            document.getElementById('modalImg').src = profile.img;
+            document.getElementById('modalName').innerText = profile.name;
+            document.getElementById('modalNick').innerText = `"${profile.nickname}"`;
+            document.getElementById('modalCampus').innerText = profile.campus;
+            document.getElementById('modalOrigin').innerText = profile.origin;
+            document.getElementById('modalSkill').innerText = profile.skill;
+            document.getElementById('modalHobby').innerText = profile.hobby;
+            document.getElementById('modalMotto').innerText = `"${profile.motto}"`;
+            document.getElementById('modalMessage').innerText = profile.message;
+            
+            const igBtn = document.getElementById('modalIg');
+            if (profile.instagram && profile.instagram !== '#' && profile.instagram !== '-') {
+                igBtn.style.display = 'inline-flex';
+                // Simple logic to handle if user typed "@username" or full url
+                let igLink = profile.instagram;
+                if (!igLink.startsWith('http')) {
+                    igLink = 'https://instagram.com/' + igLink.replace('@', '');
+                }
+                igBtn.href = igLink;
+            } else {
+                igBtn.style.display = 'none';
+            }
+            
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        // --- RENDER GALLERY (STATIC FOR NOW) ---
+        const galleryGrid = document.getElementById('galleryGrid');
+        const galleryImages = [
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
+            'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee',
+            'https://images.unsplash.com/photo-1520939817895-060bdaf4ade1',
+            'https://images.unsplash.com/photo-1559136555-930d72f1d300',
+            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1',
+            'https://images.unsplash.com/photo-1516820208784-270b250306e3'
+        ];
+
+        galleryImages.forEach((src, index) => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item fade-up';
+            item.innerHTML = `
+                <img src="${src}?w=400&q=80" alt="Gallery ${index}">
+                <div class="gallery-overlay">
+                    <i data-lucide="search" style="color: white; width: 30px; height: 30px;"></i>
                 </div>
-            </div>
-            <div class="gallery-item">
-                <div class="gallery-caption">
-                    <h4>Kegiatan Lapangan</h4>
-                    <p>Praktikum bersama di pelabuhan</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <div class="gallery-caption">
-                    <h4>Diskusi Kelompok</h4>
-                    <p>Brainstorming project akhir semester</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <div class="gallery-caption">
-                    <h4>Gathering Informal</h4>
-                    <p>Momen santai di luar kampus</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <div class="gallery
+            `;
+            galleryGrid.appendChild(item);
+        });
+
+        // --- ANIMATION ON SCROLL ---
+        function observeElements() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        }
+        
+        observeElements();
+
+        // --- MOBILE MENU ---
+        document.querySelector('.mobile-toggle').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // --- INIT ---
+        // Jalankan fetch saat halaman dimuat
+        fetchSheetData();
+
+    </script>
+</body>
+</html>
